@@ -1,41 +1,41 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jan  1 13:23:07 2022
-
-@author: Deepali
-"""
-
-
-import sqlite3
-conn = sqlite3.connect("C:\\Users\\Sevenmentor\\sqlite\\pythonsqlite.db",check_same_thread=False)
-c = conn.cursor()
-#c.execute("DROP TABLE persontable;")
-# Functions
+import mysql.connector 
+#step1 connect()
+x=mysql.connector.connect(host='localhost',
+                        username='root',
+                        password='root12345',
+                        database='project_db')
+if x:
+    print("Database created successfully")
+else:
+    print("Please try again")
+#step 2 cursor()
+y=x.cursor()
+#step 3 execute() sql query
 def create_table():
-	c.execute('CREATE TABLE IF NOT EXISTS persontable(person_id INTEGER  PRIMARY KEY,person_name TEXT,person_no INTEGER,person_dept TEXT,person_record_date DATE)')
-def add_data(person_id,person_name,person_no,person_dept,person_record_date):
-	c.execute('INSERT INTO persontable(person_id,person_name,person_no,person_dept,person_record_date) VALUES (?,?,?,?,?)',(person_id,person_name,person_no,person_dept,person_record_date))
-	conn.commit()
-
-def view_all_persons():
-	c.execute('SELECT * FROM persontable')
-	data = c.fetchall()
-	return data
-def view_update():
-    c.execute('select distinct person_dept from persontable')
-    data = c.fetchall()
+    y.execute("create table if not exists qrtable(person_name Text,address Text,course Text,course_date Date)")
+def add_record(a,b,c,d):
+    y.execute("insert into qrtable(person_name,address,course,course_date) values(%s,%s,%s,%s)",(a,b,c,d))
+    #step 4 :commit()
+    x.commit()
+def read_data():
+    y.execute("select * from qrtable")
+    data=y.fetchall()
     return data
-
-def get_department(person_dept):
-    c.execute('select * from persontable where person_dept="{}"'.format(person_dept))
-    data = c.fetchall()
+def delete(person):
+    y.execute('delete from qrtable where person_name="{}"'.format(person))
+    #step 4 :commit()
+    x.commit()
+def filter_person():
+    y.execute("select distinct person_name from qrtable")
+    data=y.fetchall()
     return data
-def update(new_person_dept,new_person_record_date,person_id):
-    c.execute('update persontable set person_dept=?,person_record_date=? where person_id=?',(new_person_dept,new_person_record_date,person_id))
-    conn.commit()
-    data=c.fetchall()
+def update(a,b,z,n):
+    y.execute('update qrtable set address=%s,course=%s,course_date=%s where person_name=%s'
+                ,(a,b,z,n))
+    x.commit()
+    data=y.fetchall()
     return data
-def delete(person_dept):
-    c.execute('delete from persontable where person_dept="{}"'.format(person_dept))
-    conn.commit()
-    
+def get_person(x):
+    y.execute('select * from qrtable where person_name="{}"'.format(x))
+    data = y.fetchall()
+    return data
