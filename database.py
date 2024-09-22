@@ -2,8 +2,8 @@ import mysql.connector
 #step1 connect()
 x=mysql.connector.connect(host='localhost',
                         username='root',
-                        password='root12345',
-                        database='project_db')
+                        password='yourpassword',
+                        database='database name')
 if x:
     print("Database created successfully")
 else:
